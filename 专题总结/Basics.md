@@ -288,7 +288,7 @@ mask = mask << 3;
 
 注意运算符 `>>` 与 `>>>` 的区别。对于正数而言二者没什么区别。
 
-`>>` 是 right shift，或者称作 算数右移位 (arithmetic right shift)，右移后在最左边补上符号位（正数是0，负数是1）
+`>>` 是 right shift，或者称作 算术右移位 (arithmetic right shift)，右移后在最左边补上符号位（正数是0，负数是1）
 
 `>>>` 是 unsigned right shift，或者称作 逻辑右移位 (logical right shift)，右移后在最左边补0
 
