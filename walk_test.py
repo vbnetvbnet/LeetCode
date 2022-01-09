@@ -1,10 +1,10 @@
 import os
 
-IGNORED_FOLDERS = ['.git', 'docs', '_image', '_attachment']
-IGNORED_FILES = ['.DS_Store', 'README', '_sidebar']     # do NOT include file extensions
-
 MD_EXTENSIONS = ['.md', '.markdown']
 BASE_DIR = '.'
+
+IGNORED_FOLDERS = ['.git', '.vscode', '.idea', 'docs', '_image', '_attachment']
+IGNORED_MD_FILES = ['README', '_sidebar']     # do NOT include file extensions
 
 
 def removeSpaces(filepath):
@@ -35,9 +35,19 @@ def walk(root):
     # isfile
     else:
         fileNameWithoutExt, ext = os.path.splitext(basename)
-        if (ext not in MD_EXTENSIONS) or (fileNameWithoutExt in IGNORED_FILES): return
+        if (ext not in MD_EXTENSIONS) or (fileNameWithoutExt in IGNORED_MD_FILES): return
         # TODO: do something with the file
         print("File:", root)
 
 
-walk(BASE_DIR)
+def walkSubdirs(root):
+    fileList = os.listdir(root)
+    fileList.sort()
+    for file in fileList:
+        filepath = os.path.join(root, file)
+        if os.path.isdir(filepath):
+            walk(filepath)
+
+
+# walk(BASE_DIR)        # walk including BASE_DIR
+walkSubdirs(BASE_DIR)   # walk without BASE_DIR itself
