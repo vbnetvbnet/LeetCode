@@ -1,75 +1,80 @@
 import os
 
-IGNORED_FOLDERS = ['.git', 'docs']
-IGNORED_FILES = ['.DS_Store', 'README']
-BASE_DIR = './'
+MD_EXTENSIONS = ['.md', '.markdown']
+BASE_DIR = '.'
 
-def removeSpaces():
-    """Remove spaces in directory and file names
-    """
-    fileList = os.listdir(BASE_DIR)
+IGNORED_FOLDERS = ['.git', '.vscode', '.idea', 'docs', '_image', '_attachment']
+IGNORED_MD_FILES = ['README', '_sidebar']     # do NOT include file extensions
+
+
+def removeSpaces(filepath):
+    if ' ' in filepath:
+        new_filepath = filepath.replace(' ', '')
+        print("[removeSpaces] rename", filepath, "to", new_filepath)
+        os.rename(filepath, new_filepath)
+        return new_filepath
+    else:
+        return filepath
+
+
+menu = "* [**Home**](/)\n\n"
+def generateMenuItem(filepath, level):
+    global menu
+    basename = os.path.basename(filepath)
+    spaces = ' '*(level-1)*2
+    # isdir
+    if os.path.isdir(filepath):
+        menu += '\n' + spaces + '* ' + basename + '\n\n'
+    # isfile
+    else:
+        fileNameWithoutExt, _ = os.path.splitext(basename)
+        menu += spaces + "- [%s](%s)" % (fileNameWithoutExt, filepath) + '\n'
+
+
+def walk(root, level):
+    root = removeSpaces(root)
+    basename = os.path.basename(root)
+    # isdir
+    if os.path.isdir(root):
+        if basename in IGNORED_FOLDERS: return
+        # TODO: do something with the folder
+        print("[level=%d] Dir: %s" % (level, root))
+        generateMenuItem(root, level)
+        # sort and walk every file in this folder
+        fileList = os.listdir(root)
+        fileList.sort()
+        for file in fileList:
+            filepath = os.path.join(root, file)
+            walk(filepath, level+1)
+    # isfile
+    else:
+        fileNameWithoutExt, ext = os.path.splitext(basename)
+        if (ext not in MD_EXTENSIONS) or (fileNameWithoutExt in IGNORED_MD_FILES): return
+        # TODO: do something with the file
+        print("[level=%d] File: %s" % (level, root))
+        generateMenuItem(root, level)
+
+
+def walkSubdirs(root, level):
+    fileList = os.listdir(root)
     fileList.sort()
+    for file in fileList:
+        filepath = os.path.join(root, file)
+        if os.path.isdir(filepath):
+            walk(filepath, level+1)
 
-    for category in fileList:
-        if category in IGNORED_FOLDERS: continue
-        categoryPath = BASE_DIR + category
-        if not os.path.isdir(categoryPath): continue
-        if ' ' in category:
-            newCategory = category.replace(' ', '')
-            newCategoryPath = BASE_DIR + newCategory
-            os.rename(categoryPath, newCategoryPath)
-            # print('Renamed "%s" to "%s"' % (categoryPath, newCategoryPath))
-            category = newCategory
-            categoryPath = newCategoryPath
-        
-        mdFileList = os.listdir(categoryPath)
-        mdFileList.sort()
-        for mdFile in mdFileList:
-            mdFilePath = categoryPath + "/" + mdFile
-            if not os.path.isfile(mdFilePath): continue
-            if ' ' in mdFile:
-                newFile = mdFile.replace(' ', '')
-                newFilePath = categoryPath + "/" + newFile
-                os.rename(mdFilePath, newFilePath)
-                # print('Renamed "%s" to "%s"' % (mdFilePath, newFilePath))
-                mdFile = newFile
-                mdFilePath = newFilePath
 
 def generateMenu():
     """Generate menu and write to '_sidebar.md'
     """
-    menu = "* [Home](/)\n\n"
+    # walk(BASE_DIR, 0)        # walk including BASE_DIR
+    walkSubdirs(BASE_DIR, 0)   # walk without BASE_DIR itself
 
-    fileList = os.listdir(BASE_DIR)
-    fileList.sort()
-
-    for category in fileList:
-        if category in IGNORED_FOLDERS: continue
-        categoryPath = BASE_DIR + category
-        if not os.path.isdir(categoryPath): continue
-        # print("## " + category)
-        # menu += "* [%s](%s/)" % (category, category) + '\n\n'
-        menu += "* " + category + '\n\n'
-
-        # Get all markdown files in current category
-        mdFileList = os.listdir(categoryPath)
-        mdFileList.sort()
-        for mdFile in mdFileList:
-            mdFilePath = categoryPath + "/" + mdFile
-            if not os.path.isfile(mdFilePath): continue
-            if mdFile.endswith(".md") or mdFile.endswith(".markdown"):
-                fileNameWithoutExt, _ = os.path.splitext(mdFile)
-                if fileNameWithoutExt in IGNORED_FILES: continue
-                # print(mdFile)
-                menu += "  - [%s](%s/%s)" % (fileNameWithoutExt, category, mdFile) + '\n'
-        
-        menu += '\n'
-
+    global menu
     # print("---------- Menu --------------")   
     # print(menu)
-    with open(BASE_DIR + '_sidebar.md', 'w') as f:
+    with open(os.path.join(BASE_DIR, '_sidebar.md'), 'w') as f:
         f.write(menu)
 
 
-removeSpaces()
 generateMenu()
