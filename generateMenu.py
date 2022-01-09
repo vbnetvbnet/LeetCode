@@ -1,7 +1,7 @@
 import os
 
-IGNORED_FOLDERS = ['docs']
-IGNORED_FILES = ['README']
+IGNORED_FOLDERS = ['.git', 'docs']
+IGNORED_FILES = ['.DS_Store', 'README']
 BASE_DIR = './'
 
 def removeSpaces():
@@ -34,7 +34,6 @@ def removeSpaces():
                 # print('Renamed "%s" to "%s"' % (mdFilePath, newFilePath))
                 mdFile = newFile
                 mdFilePath = newFilePath
-
 
 def generateMenu():
     """Generate menu and write to '_sidebar.md'
@@ -74,4 +73,3 @@ def generateMenu():
 
 removeSpaces()
 generateMenu()
-
