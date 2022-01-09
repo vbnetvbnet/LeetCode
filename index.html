@@ -15,43 +15,17 @@
       name: '',
       repo: 'https://github.com/vbnetvbnet/LeetCode',
       loadSidebar: true,
-      subMaxLevel: 2,
+      subMaxLevel: 0,
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md'
       },
-      auto2top: true,
-      plugins: [
-        function(hook, vm) {
-          hook.doneEach(function() {
-            document.querySelectorAll(".sidebar-nav > ul > li").forEach(
-              function(node, index, nodelist) {
-                if (node.firstChild.innerHTML.includes("</a>")) {
-                  return;
-                }
-                var span = document.createElement("span");
-                span.innerHTML = node.firstChild.innerHTML;
-                span.style.cursor = "pointer";
-                span.onclick = function(event) {
-                  var ul = event.target.nextElementSibling;
-                  if (ul.style.display === "none") {
-                    ul.style.display = "block";
-                  } else {
-                    ul.style.display = "none";
-                  }
-                };
-                node.firstChild.replaceWith(span);
-                node.lastChild.style.display = "none";
-            });
-            var active = document.querySelector(".sidebar-nav li.active");
-            if (active) {
-              active.parentElement.style.display = "block";
-            }
-          });
-        }
-      ]
+      auto2top: true
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+
+  <!-- docsify-sidebar-collapse -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
 
   <!-- CDN files for docsify-katex -->
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
