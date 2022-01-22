@@ -106,9 +106,16 @@
 
 * 02__LeetCode_Go
 
+  - [118.Pascal'sTriangle](./02__LeetCode_Go/118.Pascal'sTriangle.md)
+  - [119.Pascal'sTriangleII](./02__LeetCode_Go/119.Pascal'sTriangleII.md)
+  - [134.GasStation](./02__LeetCode_Go/134.GasStation.md)
+  - [169.MajorityElement](./02__LeetCode_Go/169.MajorityElement.md)
   - [189.RotateArray](./02__LeetCode_Go/189.RotateArray.md)
+  - [229.MajorityElementII](./02__LeetCode_Go/229.MajorityElementII.md)
   - [26.RemoveDuplicatesfromSortedArray](./02__LeetCode_Go/26.RemoveDuplicatesfromSortedArray.md)
   - [27.RemoveElement](./02__LeetCode_Go/27.RemoveElement.md)
+  - [274.H-Index](./02__LeetCode_Go/274.H-Index.md)
+  - [299.BullsandCows](./02__LeetCode_Go/299.BullsandCows.md)
   - [41.FirstMissingPositive](./02__LeetCode_Go/41.FirstMissingPositive.md)
   - [80.RemoveDuplicatesfromSortedArrayII](./02__LeetCode_Go/80.RemoveDuplicatesfromSortedArrayII.md)
 
