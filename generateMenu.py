@@ -17,14 +17,14 @@ def removeSpaces(filepath):
         return filepath
 
 
-menu = "* [**Home**](/)\n\n"
+menu = "* [**Home**](/)\n"
 def generateMenuItem(filepath, level):
     global menu
     basename = os.path.basename(filepath)
-    spaces = ' '*(level-1)*2
+    spaces = ' '*(level-1)*4
     # isdir
     if os.path.isdir(filepath):
-        menu += '\n' + spaces + '* ' + basename + '\n\n'
+        menu += '\n' + spaces + '* ' + basename + '\n'
     # isfile
     else:
         fileNameWithoutExt, _ = os.path.splitext(basename)
