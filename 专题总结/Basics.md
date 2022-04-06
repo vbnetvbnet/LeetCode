@@ -336,6 +336,26 @@ mask = mask << 3;
     }
 ```
 
+另一种写法：
+
+```go
+func median(nums []int) float64 {
+	n := len(nums)
+	if n == 0 {
+		return 0
+	}
+
+	mid := (n-1)/2	// mid index, prefer left when n is even
+	if n % 2 == 0 {
+		return float64(nums[mid] + nums[mid+1]) / 2.0
+	} else {
+		return float64(nums[mid])
+	}
+}
+```
+
+
+
 ## Reverse
 
 ```java
