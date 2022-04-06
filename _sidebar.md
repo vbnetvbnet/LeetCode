@@ -146,9 +146,9 @@
     - [二叉树的遍历](./Tag__Tree/二叉树的遍历.md)
 
 * 专题总结
+    - [Basics](./专题总结/Basics.md)
     - [Basics2_Classes](./专题总结/Basics2_Classes.md)
     - [Basics3_Collections](./专题总结/Basics3_Collections.md)
-    - [Basics](./专题总结/Basics.md)
     - [CombinationsAndSubsets](./专题总结/CombinationsAndSubsets.md)
     - [GenerateStringsAndPermutations](./专题总结/GenerateStringsAndPermutations.md)
     - [Heap](./专题总结/Heap.md)
