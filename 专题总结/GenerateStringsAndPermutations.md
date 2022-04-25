@@ -166,7 +166,7 @@ func helper(nums []int, prefix []int, result *[][]int, used []bool) {
 
 另外，方法二可以进一步简写：
 
-> Instead of using an additional array to store prefix, we can use a point `i` and `A[0..i)` stands for prefix. The prefix can then be extended by swapping values in `A[i:]` with `A[i]`.
+> Instead of using an additional array to store prefix, we can use a pointer `i` and `A[0..i)` stands for prefix. The prefix can then be extended by swapping values in `A[i:]` with `A[i]`.
 
 ```go
 func permute(nums []int) [][]int {
