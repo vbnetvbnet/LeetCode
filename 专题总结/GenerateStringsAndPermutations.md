@@ -7,7 +7,10 @@
 permute(nums) = generateStrings(nums, nums.length) 并且不可重复使用元素
 ```
 
+
+
 ## 问题1：generateStrings(alphabet, k)
+
 - Input: an alphabet containing **distinct** elements, and an integer `k`
 - Output: All strings of length `k` generated with the `alphabet`
 
@@ -48,6 +51,8 @@ Output: [111, 112, 113, 121, 122, 123, 131, 132, 133, 211, 212, 213, 221, 222, 2
         }
     }
 ```
+
+
 
 ## 问题2：permute(nums)
 
@@ -202,6 +207,8 @@ func helper(nums []int, i int, result *[][]int) {
 
 分析：第一种方法因为每次需要判断`prefix.contains(nums[i])`，即每次都需要遍历`prefix`以确定是否已经包含了`nums[i]`，所以效率低于方法二。但也可以使用一个额外的数组`included[]`来标记已经用过的元素来提高效率。
 
+
+
 ## 问题3：permute(nums) with duplicates
 
 - Input: an integer array which may contains duplicates
@@ -214,7 +221,46 @@ Input: nums = [2, 2, 3]
 Output: [[2, 2, 3], [2, 3, 2], [3, 2, 2]]
 ```
 
-这一题就不能像上面方法一那样简单地通过`prefix.contains(nums[i])`判断了，但可以继续使用方法二，但要保证开头元素不重复，可以使用Set.
+方法一：排序
+
+```go
+func permuteUnique(nums []int) [][]int {
+	sort.Ints(nums)		// sort nums
+    var result [][]int
+    var prefix []int
+    used := make([]bool, len(nums))
+    helper(nums, prefix, &result, used)
+    return result
+}
+
+func helper(nums []int, prefix []int, result *[][]int, used []bool) {
+    n := len(nums)
+    if len(prefix) == n {
+        // add prefix to result
+        tmp := make([]int, n)
+        copy(tmp, prefix)
+        *result = append(*result, tmp)
+        return
+    }
+
+    for i := range nums {
+        if used[i] || (i > 0 && !used[i-1] && nums[i] == nums[i-1]) { // avoid dups
+            continue
+        }
+        // generate all permutations that start with nums[i]
+        prefix = append(prefix, nums[i])
+        used[i] = true
+        helper(nums, prefix, result, used)
+        // cleanup - restore the states
+        prefix = prefix[:len(prefix)-1]
+        used[i] = false
+    }
+}
+```
+
+
+
+方法二：延续上一题的方法二，但要保证开头元素不重复，可以使用Set.
 
 ![image-20190818171757176](_image/image-20190818171757176.png)
 
