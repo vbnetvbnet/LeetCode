@@ -123,6 +123,76 @@ Output: [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
     }
 ```
 
+方法一 Golang版本：
+
+```go
+func permute(nums []int) [][]int {
+    var result [][]int
+    var prefix []int
+    used := make([]bool, len(nums))
+    helper(nums, prefix, &result, used)
+    return result
+}
+
+func helper(nums []int, prefix []int, result *[][]int, used []bool) {
+    n := len(nums)
+    if len(prefix) == n {
+        // add prefix to result
+        tmp := make([]int, n)
+        copy(tmp, prefix)
+        *result = append(*result, tmp)
+        return
+    }
+
+    for i := range nums {
+        if used[i] { // avoid dups
+            continue
+        }
+        // generate all permutations that start with nums[i]
+        prefix = append(prefix, nums[i])
+        used[i] = true
+        helper(nums, prefix, result, used)
+        // cleanup - restore the states
+        prefix = prefix[:len(prefix)-1]
+        used[i] = false
+    }
+}
+```
+
+另外，方法二可以进一步简写：
+
+> Instead of using an additional array to store prefix, we can use a point `i` and `A[0..i)` stands for prefix. The prefix can then be extended by swapping values in `A[i:]` with `A[i]`.
+
+```go
+func permute(nums []int) [][]int {
+	var result [][]int
+	helper(nums, 0, &result)
+	return result
+}
+
+// A[0..i) is fixed, i.e. prefix = A[0..i)
+// then permute A[i:]
+func helper(nums []int, i int, result *[][]int) {
+	n := len(nums)
+	if i == n {
+		// add prefix to result (as i == n, prefix is the whole array)
+		tmp := make([]int, n)
+		copy(tmp, nums)
+		*result = append(*result, tmp)
+		return
+	}
+
+	for j := i; j < n; j++ {
+		// swap values at i and j
+		nums[i], nums[j] = nums[j], nums[i]
+		// extend prefix, then permute A[i+1:]
+		helper(nums, i+1, result)
+		// clean up: restore states
+		nums[i], nums[j] = nums[j], nums[i]
+	}
+}
+```
+
 注意`starting with a[i]`和`starting from index i`之间的区别：
 
 ```
@@ -186,4 +256,46 @@ Output: [[2, 2, 3], [2, 3, 2], [3, 2, 2]]
         nums[j] = tmp;
     }
 ```
+
+可以进一步简写，省去prefix数组：
+
+```go
+func permuteUnique(nums []int) [][]int {
+	var result [][]int
+	helper(nums, 0, &result)
+	return result
+}
+
+// A[0..i) is fixed, i.e. prefix = A[0..i)
+// then permute A[i:]
+func helper(nums []int, i int, result *[][]int) {
+	n := len(nums)
+	if i == n {
+		// add prefix to result (as i == n, prefix is the whole array)
+		tmp := make([]int, n)
+		copy(tmp, nums)
+		*result = append(*result, tmp)
+		return
+	}
+
+	// consider position i, we should not put same number twice at this position
+	// use a set to store values in A[i..n)
+	set := make(map[int]bool)
+	for j := i; j < n; j++ {
+		if set[nums[j]] {
+			continue
+		}
+
+		// swap values at i and j, extend prefix
+		nums[i], nums[j] = nums[j], nums[i]
+		set[nums[i]] = true
+		// then permute A[i+1:]
+		helper(nums, i+1, result)
+		// clean up: restore states
+		nums[i], nums[j] = nums[j], nums[i]
+	}
+}
+```
+
+
 
