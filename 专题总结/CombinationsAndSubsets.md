@@ -106,8 +106,9 @@ Note that the order of subsets in the output does not matter.
     // subsets(nums) = combine(nums, 0) + combine(nums, 1) + ... + combine(nums, n)
     static List<List<Integer>> subsets2(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
-        for (int i=0; i<=nums.length; i++) {
-            subsets2(nums, i, 0, new ArrayList<>(), result);
+        for (int k=0; k<=nums.length; k++) {
+            // 所有长度为k的子集
+            subsets2(nums, k, 0, new ArrayList<>(), result);
         }
         return result;
     }
