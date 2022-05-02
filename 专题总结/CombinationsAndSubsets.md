@@ -21,9 +21,6 @@ Output: [[1, 2], [1, 3], [2, 3]]
 ## Solution
 
 ```java
-    // M(i): Get all combinations of length `k` starting from index `i`
-    // Base case: k==0 (Should NOT use "prefix.size()==k" because the value of `k` keeps changing at every iteration)
-    // Solution: M(0)
     static List<List<Integer>> combine(int[] nums, int k) {
         List<List<Integer>> result = new ArrayList<>();
         combine(nums, k, 0, new ArrayList<>(), result);
@@ -31,7 +28,7 @@ Output: [[1, 2], [1, 3], [2, 3]]
     }
 
     private static void combine(int[] nums, int k, int i, List<Integer> prefix, List<List<Integer>> result) {
-        if (k==0) {
+        if (prefix.size() == k) {
             result.add(new ArrayList<>(prefix));
             return;
         }
@@ -39,7 +36,7 @@ Output: [[1, 2], [1, 3], [2, 3]]
         if (i == nums.length) return;
         // 包含当前元素
         prefix.add(nums[i]);
-        combine(nums, k-1, i+1, prefix, result);
+        combine(nums, k, i+1, prefix, result);
         prefix.remove(prefix.size()-1);             // clean up - 恢复prefix的值
 
         // 不包含当前元素
@@ -78,9 +75,6 @@ Note that the order of subsets in the output does not matter.
 
 ```java
     // 方法一：Backtracking
-    // M(i): Get all possible subsets starting from index `i`
-    // Corner case: prefix=[], i=0; prefix=nums, i=n
-    // Solution: M(0)
     static List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         subsets(nums, 0, new ArrayList<>(), result);
@@ -103,7 +97,6 @@ Note that the order of subsets in the output does not matter.
     }
 
     // 方法二：Backtracking (输出是有序的)
-    // subsets(nums) = combine(nums, 0) + combine(nums, 1) + ... + combine(nums, n)
     static List<List<Integer>> subsets2(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         for (int k=0; k<=nums.length; k++) {
@@ -114,16 +107,14 @@ Note that the order of subsets in the output does not matter.
     }
 
     private static void subsets2(int[] nums, int k, int i, List<Integer> prefix, List<List<Integer>> result) {
-        if (k == 0) {
+        if (prefix.size() == k) {
             result.add(new ArrayList<>(prefix));
             return;
         }
 
         for (int j=i; j<nums.length; j++) {
-            // subsets(prefix=prefix+nums[i]
             prefix.add(nums[j]);
-            subsets2(nums, k-1, j+1, prefix, result);
-            // clean up - restore value of prefix
+            subsets2(nums, k, j+1, prefix, result);
             prefix.remove(prefix.size()-1);
         }
     }
