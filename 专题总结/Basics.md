@@ -338,6 +338,10 @@ mask = mask << 3;
 
 另一种写法：
 
+> 中间值 = ( 首项 + 末项 )  /  2
+>
+> mid     = ( 0      + (n-1) )  /  2
+
 ```go
 func median(nums []int) float64 {
 	n := len(nums)
